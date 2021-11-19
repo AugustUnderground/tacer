@@ -1,0 +1,165 @@
+{
+  "environment":"SingleEndedOpampEnvironment",
+  "parameters":
+  {
+
+%PARAMETERS%
+
+%SIZING%
+
+  },
+  "performances":
+  {
+      "dcop":
+      {
+
+%DCOP%
+
+      },
+
+      "dcmatch":
+      {
+        "voff_stat":{
+          "unit":"V",
+          "reference":"totalOutput.sigmaOut",
+          "comment" : "Statistical Offset"
+        },
+        "voff_sys":{
+          "unit":"Hz",
+          "reference":"totalOutput.dcOp",
+          "comment" : "Systematic Offset"
+        },
+
+%DCMATCH%
+
+      },
+
+      "stb":
+      {
+        "a_0":{
+          "unit":"dB",
+          "comment" : "DC Gain"
+        },
+        "ugbw":{
+          "unit":"Hz",
+          "comment" : "Unity-Gain Bandwidth"
+        },
+        "cof":{
+          "unit":"Hz",
+          "comment" : "crossover frequency"
+        },
+        "pm":{
+          "unit":"deg",
+          "comment" : "Phase-Margin"
+        },
+        "gm":{
+          "unit":"dB",
+          "comment" : "Gain-Margin"
+        }
+      },
+
+      "tran":
+      {
+        "sr_r":{
+          "unit":"V/s",
+          "comment" : "rising slew-rate"
+        },
+        "overshoot_r":{
+          "unit":"1",
+          "comment" : "rising overshoot"
+        },
+        "sr_f":{
+          "unit":"V/s",
+          "comment" : "falling slew-rate"
+        },
+        "overshoot_f":{
+          "unit":"1",
+          "comment" : "falling overshoot"
+        }
+      },
+
+      "noise":
+      {
+        "vn_1Hz":{
+          "unit":"V^2/Hz",
+          "comment" : "output noise density at 1 Hz" 
+        },
+        "vn_10Hz":{
+          "unit":"V^2/Hz",
+          "comment" : "output noise density at 10 Hz" 
+        },
+        "vn_100Hz":{
+          "unit":"V^2/Hz",
+          "comment" : "output noise density at 100 Hz" 
+        },
+        "vn_1kHz":{
+          "unit":"V^2/Hz",
+          "comment" : "output noise density at 1 kHz" 
+        },
+        "vn_10kHz":{
+          "unit":"V^2/Hz",
+          "comment" : "output noise density at 10 kHz" 
+        },
+        "vn_100kHz":{
+          "unit":"V^2/Hz",
+          "comment" : "output noise density at 100 kHz" 
+        }
+      },
+
+      "dc1":
+      {
+        "v_ol":{
+          "unit":"V",
+          "comment" : "minimal output voltage" 
+        },
+        "v_oh":{
+          "unit":"V",
+          "comment" : "maximal output voltage" 
+        }
+      },
+
+      "xf":
+      {
+        "psrr_p":{
+          "unit":"dB",
+          "comment" : "power supply rejection ration wrt. to the positive supply rail" 
+        },
+        "psrr_n":{
+          "unit":"dB",
+          "comment" : "power supply rejection ration wrt. to the negative supply rail" 
+        },
+        "cmrr":{
+          "unit":"dB",
+          "comment" : "common mode rejection ration" 
+        }
+      },
+
+      "ac":
+      {
+        "v_il":{
+          "unit":"V",
+          "comment" : "minimal input voltage" 
+        },
+        "v_ih":{
+          "unit":"V",
+          "comment" : "maximal input voltage" 
+        }
+      },
+
+      "dc3":
+      {
+        "i_out_min":{
+          "unit":"A",
+          "comment" : "minimal output current" 
+        }
+      },
+
+      "dc4":
+      {
+        "i_out_max":{
+          "unit":"A",
+          "comment" : "maximal output current" 
+        }
+      }
+    }
+}

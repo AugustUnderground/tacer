@@ -1,0 +1,7 @@
+resolver: lts-17.4
+compiler: ghc-8.10.4
+
+packages:
+- .
+
+# extra-deps: []

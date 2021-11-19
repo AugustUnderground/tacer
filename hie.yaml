@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "tacer:lib"
+
+    - path: "./app/Main.hs"
+      component: "tacer:exe:tacer"
+
+    - path: "./app/Paths_tacer.hs"
+      component: "tacer:exe:tacer"
+
+    - path: "./test"
+      component: "tacer:test:tacer-test"
