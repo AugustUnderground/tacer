@@ -18,7 +18,7 @@ main = do
 
     let cfg     = parseACEConfig rawCfg
         opID    = aceID cfg
-        dutTemp = T.concat ["resource/ops/", opID, "-template.scs"]
+        dutTemp = T.concat ["resource/", opID, "-template.scs"]
 
     propTemplate <- getDataFileName propTemp >>= TIO.readFile
     testTemplate <- getDataFileName testTemp >>= TIO.readFile

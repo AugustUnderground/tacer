@@ -45,12 +45,14 @@ data ACEConstraints = ACEConstraints { minW  :: Float
                                      , gridL :: Float
                                      } deriving (Show, Generic)
 
-data ACEInstance = ACEInstance { nmosInstance :: T.Text
-                               , nmosDerived  :: T.Text
-                               , nmosPostFix  :: T.Text
-                               , pmosInstance :: T.Text
-                               , pmosDerived  :: T.Text
-                               , pmosPostFix  :: T.Text
+data ACEInstance = ACEInstance { nmosInstance      :: T.Text
+                               , nmosPostFix       :: T.Text
+                               , pmosInstance      :: T.Text
+                               , pmosPostFix       :: T.Text
+                               , capInstance       :: T.Text
+                               , resInstance       :: T.Text
+                               , derivedInstances  :: [T.Text]
+                               , derivedStatements :: [T.Text]
                                } deriving (Show, Generic)
 
 data ACEdcop = ACEdcop { dcopParameters :: [T.Text]
@@ -104,8 +106,12 @@ cpf a b = jpf (T.commonPrefixes a b)
     where jpf (Just (a,_,_))  = a
           jpf Nothing = b
 
+dcmShort' :: Maybe T.Text -> T.Text
+dcmShort' (Just txt) = txt
+dcmShort' Nothing = ""
+
 dcmShort :: [T.Text] -> T.Text -> T.Text
-dcmShort ps p = fromJust $ T.stripPrefix cp =<< T.stripSuffix cs p
+dcmShort ps p = dcmShort' $ T.stripPrefix cp =<< T.stripSuffix cs p
     where cp = foldl cpf "" ps
           cs = T.reverse . foldl cpf "" . map T.reverse $ ps
 
@@ -321,16 +327,26 @@ fillTestbenchTemplate cfg dut = T.replace i i'
           h' = genHeader cfg
           c' = genScale cfg
 
+fillDerviedStatements :: ACEInstance -> T.Text -> T.Text
+fillDerviedStatements inst dut = T.unlines [ M.foldrWithKey f l' dis 
+                                           | l' <- T.lines dut ]
+    where dis = M.fromList $ zip (derivedInstances inst) (derivedStatements inst)
+          f k v l | T.isInfixOf k l = T.replace "%DERIVED%" 
+                                                (T.concat [" \\\n\t\t", v]) l
+                  | otherwise       = l
+
 fillDutTemplate :: ACEInstance -> T.Text -> T.Text
-fillDutTemplate inst = T.replace n n'
+fillDutTemplate inst = fillDerviedStatements inst
+                     . T.replace n n'
                      . T.replace p p'
-                     . T.replace dn dn'
-                     . T.replace dp dp'
+                     . T.replace r r'
+                     . T.replace c c'
+                     . T.replace p p'
     where n = "%NMOS%"
           p = "%PMOS%"
-          dn = "%NDERIVED%"
-          dp = "%PDERIVED%"
+          r = "%RES%"
+          c = "%CAP%"
           n' = nmosInstance inst
           p' = pmosInstance inst
-          dn' = pmosDerived inst
-          dp' = nmosDerived inst
+          r' = resInstance inst
+          c' = capInstance inst

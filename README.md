@@ -22,6 +22,17 @@ $ pushd tacer
 $ stack build
 
 $ stack install
+```
 
+Generate the testbench `input.scs` and `properties.json` for a specific OP by
+passing a corresponding `op#.yaml` to `tacer`.
+
+```bash
 $ tacer examples/op2.yaml
+```
+
+For all examples do:
+
+```bash
+$ for id (1,2,3,4,5,6,8,9); do tacer ./examples/op$id.yaml; done
 ```

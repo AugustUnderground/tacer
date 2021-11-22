@@ -19,7 +19,14 @@ extra-source-files:
     README.md
     ChangeLog.md
 data-files:
+    ./resource/op1-template.scs
     ./resource/op2-template.scs
+    ./resource/op3-template.scs
+    ./resource/op4-template.scs
+    ./resource/op5-template.scs
+    ./resource/op6-template.scs
+    ./resource/op8-template.scs
+    ./resource/op9-template.scs
     ./resource/prop-template.json
     ./resource/tb-template.scs
 
