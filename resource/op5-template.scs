@@ -1,0 +1,17 @@
+subckt op B INP INN O VDD VSS
+    MNCM11  (B  B   VSS VSS) %NMOS% m=Mcm11 w=Wcm1 l=Lcm1 %NDERIVED%
+    MNCM12  (R  B   VSS VSS) %NMOS% m=Mcm12 w=Wcm1 l=Lcm1 %NDERIVED%
+    MNCM13  (CM B   VSS VSS) %NMOS% m=Mcm13 w=Wcm1 l=Lcm1 %NDERIVED%
+    MNCM31  (Z  Z   VSS VSS) %NMOS% m=Mcm31 w=Wcm3 l=Lcm3 %NDERIVED%
+    MNCM32  (O  Z   VSS VSS) %NMOS% m=Mcm32 w=Wcm3 l=Lcm3 %NDERIVED%
+    MND12   (X  INP CM  VSS) %NMOS% m=Md w=Wd l=Ld %NDERIVED%
+    MND11   (Y  INN CM  VSS) %NMOS% m=Md w=Wd l=Ld %NDERIVED%
+    MPC1R   (R  R   VDD VDD) %PMOS% m=1    w=Wr  l=Lr %PDERIVED%
+    MPC12   (Z  R   V   VDD) %PMOS% m=Mc12 w=Wc1 l=Lc1 %PDERIVED%
+    MPC11   (O  R   W   VDD) %PMOS% m=Mc11 w=Wc1 l=Lc1 %PDERIVED%
+    MPCM222 (V  Y   VDD VDD) %PMOS% m=Mcm222 w=Wcm2 l=Lcm2 %PDERIVED%
+    MPCM221 (Y  Y   VDD VDD) %PMOS% m=Mcm2x1 w=Wcm2 l=Lcm2 %PDERIVED%
+    MPCM212 (W  X   VDD VDD) %PMOS% m=Mcm212 w=Wcm2 l=Lcm2 %PDERIVED%
+    MPCM211 (X  X   VDD VDD) %PMOS% m=Mcm2x1 w=Wcm2 l=Lcm2 %PDERIVED%
+ends op
+

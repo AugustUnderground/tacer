@@ -1,0 +1,12 @@
+subckt op B INP INN O VDD VSS
+    MNCM1R  (B  B   VSS VSS) %NMOS% m=Mcm11 w=Wcm1 l=Lcm1 %DERIVED%
+    MNCM1A  (CM B   VSS VSS) %NMOS% m=Mcm12 w=Wcm1 l=Lcm1 %DERIVED%
+    MNCM1B  (O  B   VSS VSS) %NMOS% m=Mcm13 w=Wcm1 l=Lcm1 %DERIVED%
+    MND1A   (Y  INP CM  VSS) %NMOS% m=Md w=Wd l=Ld %DERIVED%
+    MND1B   (X  INN CM  VSS) %NMOS% m=Md w=Wd l=Ld %DERIVED%
+    MPCM2R  (X  X   VDD VDD) %PMOS% m=Mcm21 w=Wcm2 l=Lcm2 %DERIVED%
+    MPCM2A  (Y  X   VDD VDD) %PMOS% m=Mcm22 w=Wcm2 l=Lcm2 %DERIVED%
+    MPCS1   (O  Y   VDD VDD) %PMOS% m=Mcs w=Wcs l=Lcs %DERIVED%
+    CL      (A  Y)           %CAP%  m=Mcap area=Wcap*Wcap peri=4*Wcap   // c=3p
+    RL      (O  A)           %RES%  m=1 w=Wres l=Lres                   // r=1k
+ends op
