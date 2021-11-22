@@ -55,6 +55,10 @@ deviceInstance:
   nmosPostFix:  "sky130_fd_pr__nfet_01v8"
   pmosInstance: "sky130_fd_pr__pfet_01v8"
   pmosPostFix:  "sky130_fd_pr__pfet_01v8"
+  resInstance:  "resistor"
+  capInstance:  "capacitor"
+  derivedInstances: []
+  derivedStatements: []
 dcop:
   dcopParameters:
     - "gm"

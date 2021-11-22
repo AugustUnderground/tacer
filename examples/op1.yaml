@@ -96,9 +96,15 @@ dcop:
     - "1"
 dcmatch:
   nmosDCmParameters:
-    - "foo"
+    - "sky130_fd_pr__nfet_01v8__vth0_slope_spectre"
+    - "sky130_fd_pr__nfet_01v8__toxe_slope_spectre"
+    - "sky130_fd_pr__nfet_01v8__nfactor_slope_spectre"
   pmosDCmParameters:
-    - "bar"
+    - "sky130_fd_pr__pfet_01v8__vth0_slope_spectre"
+    - "sky130_fd_pr__pfet_01v8__toxe_slope_spectre"
+    - "sky130_fd_pr__pfet_01v8__nfactor_slope_spectre"
   unitsDCm:
     - "v"
+    - "1"
+    - "1"
 

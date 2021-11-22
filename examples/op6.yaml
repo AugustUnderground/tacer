@@ -64,11 +64,13 @@ sizingConstraints:
   gridW: 0.05
 deviceInstance:
   nmosInstance: "sky130_fd_pr__nfet_01v8"
-  nmosDerived:  ""
   nmosPostFix:  "sky130_fd_pr__nfet_01v8"
   pmosInstance: "sky130_fd_pr__pfet_01v8"
-  pmosDerived:  ""
   pmosPostFix:  "sky130_fd_pr__pfet_01v8"
+  resInstance:  "resistor"
+  capInstance:  "capacitor"
+  derivedInstances: []
+  derivedStatements: []
 dcop:
   dcopParameters:
     - "gm"
