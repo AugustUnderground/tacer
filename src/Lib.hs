@@ -91,15 +91,15 @@ parseACEConfig bs = cfg
           cfg = case parsedCfg of (Left e)  -> error (show e)
                                   (Right c) -> c
 
-genDCmatchJson' :: T.Text -> (T.Text, T.Text, T.Text) -> (T.Text, T.Text, T.Text) -> T.Text -> T.Text
-genDCmatchJson' ds (ni, pn, un) (pi, pp, up) cs = foldl T.append "" 
-        [ "\n        \"" , ds , "/" , i' , "/" , T.toLower cs , "\":{\n"
-        , "          \"unit\": \"" , u' , "\",\n" 
-        , "          \"reference\": \"DUT." , ds , "." , p' , "(m)." , cs , "\"\n"
-        , "        }," ]
-    where p' = if T.isPrefixOf "MN" ds then pn else pp 
-          u' = if T.isPrefixOf "MN" ds then un else up
-          i' = if T.isPrefixOf "MN" ds then ni else pi
+genDCmatchJson' :: ACEdcmatch -> T.Text -> T.Text -> T.Text
+genDCmatchJson' dcm ds cs = T.concat 
+                          . map (\(i', p', u') -> T.concat
+                                    [ "\n        \"" , ds , "/" , i' , "/" , T.toLower cs , "\": {\n"
+                                    , "          \"unit\": \"" , u' , "\",\n" 
+                                    , "          \"reference\": \"DUT." , ds , "." , p' , "(m)." , cs , "\"\n"
+                                    , "        }," ])
+                          $ dcps
+    where dcps = dcmParameters dcm ds
 
 cpf :: T.Text -> T.Text -> T.Text
 cpf a b = jpf (T.commonPrefixes a b)
@@ -115,19 +115,20 @@ dcmShort ps p = dcmShort' $ T.stripPrefix cp =<< T.stripSuffix cs p
     where cp = foldl cpf "" ps
           cs = T.reverse . foldl cpf "" . map T.reverse $ ps
 
+dcmParameters :: ACEdcmatch -> T.Text -> [(T.Text, T.Text, T.Text)]
+dcmParameters dcm inst = zip3 ps ss us
+    where ps = if T.isPrefixOf "MN" inst 
+                  then nmosDCmParameters dcm 
+                  else pmosDCmParameters dcm
+          ss = map (dcmShort ps) ps
+          us = unitsDCm dcm
+
 genDCmatchJson :: ACEConfig -> T.Text
 genDCmatchJson cfg = T.init . T.concat 
-                   $ [ genDCmatchJson' ds pn pp cs 
+                   $ [ genDCmatchJson' dcm ds cs -- pn pp cs 
                      | ds <- dutInstances (aceID cfg)
-                     , pn <- zip3 nss nps dcu
-                     , pp <- zip3 pss pps dcu
                      , cs <- ["Contribution", "Sensitivity"] ]
     where dcm = dcmatch cfg
-          nps = nmosDCmParameters dcm
-          nss = map (dcmShort nps) nps
-          pps = pmosDCmParameters dcm
-          pss = map (dcmShort pps) pps
-          dcu = unitsDCm dcm
 
 genDCopJson' :: (T.Text, T.Text) -> (T.Text, T.Text) -> T.Text
 genDCopJson' (d, i) (p, u) = foldl T.append ""
