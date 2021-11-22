@@ -2,4 +2,4 @@
 *~
 *.raw
 *.log
-op*
+examples/xt018
