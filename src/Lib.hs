@@ -328,8 +328,10 @@ fillTestbenchTemplate cfg dut = T.replace i i'
           c' = genScale cfg
 
 fillDerviedStatements :: ACEInstance -> T.Text -> T.Text
-fillDerviedStatements inst dut = T.unlines [ M.foldrWithKey f l' dis 
-                                           | l' <- T.lines dut ]
+fillDerviedStatements inst dut = T.replace "%DERIVED%" ""
+                               . T.unlines 
+                               $ [ M.foldrWithKey f l' dis 
+                                 | l' <- T.lines dut ]
     where dis = M.fromList $ zip (derivedInstances inst) (derivedStatements inst)
           f k v l | T.isInfixOf k l = T.replace "%DERIVED%" 
                                                 (T.concat [" \\\n\t\t", v]) l
