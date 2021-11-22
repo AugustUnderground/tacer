@@ -7,6 +7,6 @@ subckt op B INP INN O VDD VSS
     MPCM2R  (X  X   VDD VDD) %PMOS% m=Mcm21 w=Wcm2 l=Lcm2 %DERIVED%
     MPCM2A  (Y  X   VDD VDD) %PMOS% m=Mcm22 w=Wcm2 l=Lcm2 %DERIVED%
     MPCS1   (O  Y   VDD VDD) %PMOS% m=Mcs w=Wcs l=Lcs %DERIVED%
-    CL      (A  Y)           %CAP%  m=Mcap area=Wcap*Wcap peri=4*Wcap   // c=3p
-    RL      (O  A)           %RES%  m=1 w=Wres l=Lres                   // r=1k
+    C0      (O  A)           %CAP%  area=Wcap*Wcap m=Mcap %DERIVED%         // perimeter=2*(Wcap+Wcap) par1=Mcap
+    R0      (A  Y   VSS)     %RES%  %DERIVED% l=Lres w=Wres m=1 %DERIVED%   // pm=-1 par1=(1)
 ends op
