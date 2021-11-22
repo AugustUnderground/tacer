@@ -19,8 +19,9 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.Yaml as Y
 import Data.Char
 import Data.Maybe
-import GHC.Generics
 import Data.Aeson
+import GHC.Generics
+import Control.Monad
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Text as T
@@ -101,31 +102,31 @@ genDCmatchJson' dcm ds cs = T.concat
                           $ dcps
     where dcps = dcmParameters dcm ds
 
-cpf :: T.Text -> T.Text -> T.Text
-cpf a b = jpf (T.commonPrefixes a b)
-    where jpf (Just (a,_,_))  = a
-          jpf Nothing = b
-
 dcmShort' :: Maybe T.Text -> T.Text
 dcmShort' (Just txt) = txt
-dcmShort' Nothing = ""
+dcmShort' Nothing    = ""
 
-dcmShort :: [T.Text] -> T.Text -> T.Text
-dcmShort ps p = dcmShort' $ T.stripPrefix cp =<< T.stripSuffix cs p
-    where cp = foldl cpf "" ps
-          cs = T.reverse . foldl cpf "" . map T.reverse $ ps
+cpf :: [T.Text] -> T.Text
+cpf [] = ""
+cpf f = head f
+
+dcmShort :: [T.Text] -> [T.Text]
+dcmShort ps = map (dcmShort' . (T.stripPrefix sp <=< T.stripSuffix ss)) ps
+    where sp = cpf . T.transpose . takeWhile seq . T.transpose $ ps
+          ss = cpf . T.transpose . takeWhile seq . T.transpose . map T.reverse $ ps
+          seq s' = T.all (\x -> x == T.head s') s'
 
 dcmParameters :: ACEdcmatch -> T.Text -> [(T.Text, T.Text, T.Text)]
 dcmParameters dcm inst = zip3 ps ss us
     where ps = if T.isPrefixOf "MN" inst 
                   then nmosDCmParameters dcm 
                   else pmosDCmParameters dcm
-          ss = map (dcmShort ps) ps
+          ss = dcmShort ps
           us = unitsDCm dcm
 
 genDCmatchJson :: ACEConfig -> T.Text
 genDCmatchJson cfg = T.init . T.concat 
-                   $ [ genDCmatchJson' dcm ds cs -- pn pp cs 
+                   $ [ genDCmatchJson' dcm ds cs
                      | ds <- dutInstances (aceID cfg)
                      , cs <- ["Contribution", "Sensitivity"] ]
     where dcm = dcmatch cfg
