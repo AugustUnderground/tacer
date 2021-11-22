@@ -1,0 +1,104 @@
+technology: "sky130-1V8"
+aceID:      "op1"
+scale:      1e-6
+includes:
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "tt"
+parameters:
+  cl:   5e-12
+  rl:   100e6
+  i0:   3e-6
+  vs:   500e-3
+  vsup: 1.8
+  area: "(Mcm13+Mcm12+Mcm13)*Wcm1*Lcm1+2*Md*Wd*Ld+ (Mcm21+Mcm22)*Wcm2*Lcm2+Mcs*Wcs*Lcs+Wres*Lres+ Wcap*Wcap*Mcap"
+sizingParameters:
+  - "Lcm1"
+  - "Lcm2"
+  - "Lcs"
+  - "Ld"
+  - "Lres"
+  - "Wcm1"
+  - "Wcm2"
+  - "Wcs"
+  - "Wd"
+  - "Wres"
+  - "Wcap"
+  - "Mcm11"
+  - "Mcm21"
+  - "Mcs"
+  - "Md"
+  - "Mcap"
+  - "Mcm12"
+  - "Mcm22"
+  - "Mcm13"
+sizingInit:
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
+  - 99.0
+  - 3.0
+  - 3.0
+  - 3.0
+  - 3.0
+  - 2.0
+  - 69.0
+  - 1
+  - 2
+  - 22
+  - 2
+  - 1
+  - 5
+  - 2
+  - 22
+sizingConstraints:
+  minL: 0.18
+  minW: 0.42
+  gridL: 0.025
+  maxL: 20
+  maxW: 100
+  gridW: 0.05
+deviceInstance:
+  nmosInstance: "sky130_fd_pr__nfet_01v8"
+  nmosPostFix:  "sky130_fd_pr__nfet_01v8"
+  pmosInstance: "sky130_fd_pr__pfet_01v8"
+  pmosPostFix:  "sky130_fd_pr__pfet_01v8"
+  resInstance:  "resistor"
+  capInstance:  "capacitor"
+  derivedInstances: []
+  derivedStatements: []
+dcop:
+  dcopParameters:
+    - "gm"
+    - "gds"
+    - "id"
+    - "gmoverid"
+    - "fug"
+    - "vdsat"
+    - "vgs"
+    - "vds"
+    - "vbs"
+    - "gmb"
+    - "vth"
+    - "self_gain"
+  dcopUnits: 
+    - "S"
+    - "S"
+    - "A"
+    - "1/V"
+    - "Hz"
+    - "V"
+    - "V"
+    - "V"
+    - "V"
+    - "S"
+    - "V"
+    - "1"
+dcmatch:
+  nmosDCmParameters:
+    - "foo"
+  pmosDCmParameters:
+    - "bar"
+  unitsDCm:
+    - "v"
+

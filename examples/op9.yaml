@@ -1,0 +1,126 @@
+technology: "sky130-1V8"
+aceID:      "op9"
+scale:      1e-6
+includes:
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "tt"
+parameters:
+  cl:   5e-12
+  rl:   100e6
+  i0:   3e-6
+  vs:   500e-3
+  vsup: 1.8
+  area: "Wcm3*Lcm3*(Mcm31+Mcm32+Mcm32+Mcm34) + Wcm4*Lcm4*(Mcm41+Mcm42+Mcm43+Mcm44) + Wls1*Wls1*2*Mls1 + Wcm2*Lcm2*2*Mcm2 + Wcm1*Lcm1*2*Mcm1 + Wr1*Lr1 + Wr2*Lr2"
+sizingParameters:
+  - "Ld1"
+  - "Lcm1"
+  - "Lcm2"
+  - "Lcm3"
+  - "Lcm4"
+  - "Lls1"
+  - "Lr1"
+  - "Lr2"
+  - "Wd1"
+  - "Wcm1"
+  - "Wcm2"
+  - "Wcm3"
+  - "Wcm4"
+  - "Wls1"
+  - "Wr1"
+  - "Wr2"
+  - "Md1"
+  - "Mcm1"
+  - "Mcm2"
+  - "Mcm31"
+  - "Mcm41"
+  - "Mls1"
+  - "Mcm32"
+  - "Mcm42"
+  - "Mcm33"
+  - "Mcm43"
+  - "Mcm34"
+  - "Mcm44"
+sizingInit:
+  - 5.15
+  - 6.0
+  - 1.0
+  - 5.0
+  - 1.95
+  - 1.0
+  - 5.0
+  - 2.0
+  - 3.0
+  - 5.0
+  - 6.0
+  - 14.0
+  - 2.55
+  - 1.8
+  - 1.0
+  - 1.0
+  - 2
+  - 3
+  - 3
+  - 1
+  - 1
+  - 3
+  - 1
+  - 1
+  - 4
+  - 4
+  - 4
+  - 1
+sizingConstraints:
+  minL: 0.18
+  minW: 0.42
+  gridL: 0.025
+  maxL: 20
+  maxW: 100
+  gridW: 0.05
+deviceInstance:
+  nmosInstance: "sky130_fd_pr__nfet_01v8"
+  nmosDerived:  ""
+  nmosPostFix:  "sky130_fd_pr__nfet_01v8"
+  pmosInstance: "sky130_fd_pr__pfet_01v8"
+  pmosDerived:  ""
+  pmosPostFix:  "sky130_fd_pr__pfet_01v8"
+dcop:
+  dcopParameters:
+    - "gm"
+    - "gds"
+    - "id"
+    - "gmoverid"
+    - "fug"
+    - "vdsat"
+    - "vgs"
+    - "vds"
+    - "vbs"
+    - "gmb"
+    - "vth"
+    - "self_gain"
+  dcopUnits: 
+    - "S"
+    - "S"
+    - "A"
+    - "1/V"
+    - "Hz"
+    - "V"
+    - "V"
+    - "V"
+    - "V"
+    - "S"
+    - "V"
+    - "1"
+dcmatch:
+  nmosDCmParameters:
+    - "sky130_fd_pr__nfet_01v8__vth0_slope_spectre"
+    - "sky130_fd_pr__nfet_01v8__toxe_slope_spectre"
+    - "sky130_fd_pr__nfet_01v8__nfactor_slope_spectre"
+  pmosDCmParameters:
+    - "sky130_fd_pr__pfet_01v8__vth0_slope_spectre"
+    - "sky130_fd_pr__pfet_01v8__toxe_slope_spectre"
+    - "sky130_fd_pr__pfet_01v8__nfactor_slope_spectre"
+  unitsDCm:
+    - "v"
+    - "1"
+    - "1"
+

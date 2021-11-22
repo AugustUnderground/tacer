@@ -1,0 +1,114 @@
+technology: "sky130-1V8"
+aceID:      "op5"
+scale:      1e-6
+includes:
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "tt"
+parameters:
+  cl:   5e-12
+  rl:   100e6
+  i0:   3e-6
+  vs:   500e-3
+  vsup: 1.8
+  area: "(Mcm11+Mcm12)*Wcm1*Lcm1+2*Md*Wd*Ld+Wc1*Lc1*(Mc11+Mc12)+ (Mcm31+Mcm32)*Wcm3*Lcm3+Wr*Lr+(2*Mcm2x1+Mcm212+Mcm222)*Wcm2*Lcm2"
+sizingParameters:
+  - "Lcm1"
+  - "Lcm2"
+  - "Lcm3"
+  - "Ld"
+  - "Lr"
+  - "Wcm1"
+  - "Wcm2"
+  - "Wcm3"
+  - "Wd"
+  - "Wc1"
+  - "Mcm11"
+  - "Mcm212"
+  - "Mcm31"
+  - "Md"
+  - "Mc11"
+  - "Mcm12"
+  - "Mcm222"
+  - "Mcm32"
+  - "Mc12"
+  - "Mcm13"
+  - "Mcm2x1"
+sizingInit:
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
+  - 3.0
+  - 3.0
+  - 3.0
+  - 3.0
+  - 3.0
+  - 3.0
+  - 1
+  - 4
+  - 2
+  - 2
+  - 4
+  - 1
+  - 2
+  - 2
+  - 2
+  - 2
+  - 1
+sizingConstraints:
+  minL: 0.18
+  minW: 0.42
+  gridL: 0.025
+  maxL: 20
+  maxW: 100
+  gridW: 0.05
+deviceInstance:
+  nmosInstance: "sky130_fd_pr__nfet_01v8"
+  nmosDerived:  ""
+  nmosPostFix:  "sky130_fd_pr__nfet_01v8"
+  pmosInstance: "sky130_fd_pr__pfet_01v8"
+  pmosDerived:  ""
+  pmosPostFix:  "sky130_fd_pr__pfet_01v8"
+dcop:
+  dcopParameters:
+    - "gm"
+    - "gds"
+    - "id"
+    - "gmoverid"
+    - "fug"
+    - "vdsat"
+    - "vgs"
+    - "vds"
+    - "vbs"
+    - "gmb"
+    - "vth"
+    - "self_gain"
+  dcopUnits: 
+    - "S"
+    - "S"
+    - "A"
+    - "1/V"
+    - "Hz"
+    - "V"
+    - "V"
+    - "V"
+    - "V"
+    - "S"
+    - "V"
+    - "1"
+dcmatch:
+  nmosDCmParameters:
+    - "sky130_fd_pr__nfet_01v8__vth0_slope_spectre"
+    - "sky130_fd_pr__nfet_01v8__toxe_slope_spectre"
+    - "sky130_fd_pr__nfet_01v8__nfactor_slope_spectre"
+  pmosDCmParameters:
+    - "sky130_fd_pr__pfet_01v8__vth0_slope_spectre"
+    - "sky130_fd_pr__pfet_01v8__toxe_slope_spectre"
+    - "sky130_fd_pr__pfet_01v8__nfactor_slope_spectre"
+  unitsDCm:
+    - "v"
+    - "1"
+    - "1"
+
