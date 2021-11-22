@@ -94,9 +94,9 @@ parseACEConfig bs = cfg
 genDCmatchJson' :: ACEdcmatch -> T.Text -> T.Text -> T.Text
 genDCmatchJson' dcm ds cs = T.concat 
                           . map (\(i', p', u') -> T.concat
-                                    [ "\n        \"" , ds , "/" , i' , "/" , T.toLower cs , "\": {\n"
+                                    [ "\n        \"" , ds , "/" , p' , "/" , T.toLower cs , "\": {\n"
                                     , "          \"unit\": \"" , u' , "\",\n" 
-                                    , "          \"reference\": \"DUT." , ds , "." , p' , "(m)." , cs , "\"\n"
+                                    , "          \"reference\": \"DUT." , ds , "." , i' , "(m)." , cs , "\"\n"
                                     , "        }," ])
                           $ dcps
     where dcps = dcmParameters dcm ds

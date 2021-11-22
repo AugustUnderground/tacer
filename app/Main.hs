@@ -26,13 +26,21 @@ main = do
 
     let prop = fillPropertiesTemplate cfg propTemplate
         tb   = fillTestbenchTemplate cfg dutTempalte testTemplate
-        dir  = "./" ++ T.unpack opID
+
+    let dir            = "./" ++ T.unpack opID
         propertiesFile = dir ++ "/properties.json"
-        inputFile = dir ++ "/input.scs"
+        inputFile      = dir ++ "/input.scs"
+        gitignoreFile  = dir ++ "/.gitignore"
     
     createDirectory dir
 
+    let foo = flip copyFile gitignoreFile
+
+    getDataFileName gitTemp >>= (`copyFile` gitignoreFile)
+
     TIO.writeFile propertiesFile prop
     TIO.writeFile inputFile tb
+
   where propTemp = "resource/prop-template.json"
         testTemp = "resource/tb-template.scs"
+        gitTemp  = "resource/ignore-template.git"
