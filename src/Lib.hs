@@ -13,6 +13,7 @@ module Lib
     , fillPropertiesTemplate
     , fillTestbenchTemplate
     , fillDutTemplate
+    , mapCornerTemplates
     ) where
 
 import qualified Data.ByteString.Char8 as BS
@@ -37,6 +38,14 @@ data ACEParameters = ACEParameters { cl   :: Float
                                    , vsup :: Float
                                    , area :: T.Text
                                    } deriving (Show, Generic)
+
+data ACECorners = ACECorners { ff :: [ACEIncludes]
+                             , fs :: [ACEIncludes]
+                             , mc :: [ACEIncludes]
+                             , sf :: [ACEIncludes]
+                             , ss :: [ACEIncludes]
+                             , temperatures :: [Float]
+                             } deriving (Show, Generic)
 
 data ACEConstraints = ACEConstraints { minW  :: Float
                                      , minL  :: Float
@@ -68,7 +77,7 @@ data ACEdcmatch = ACEdcmatch { nmosDCmParameters :: [T.Text]
 data ACEConfig = ACEConfig { technology        :: T.Text
                            , aceID             :: T.Text
                            , scale             :: Float
-                           , includes          :: [ACEIncludes]
+                           , corners           :: ACECorners
                            , parameters        :: ACEParameters
                            , sizingParameters  :: [T.Text]
                            , sizingInit        :: [Float]
@@ -79,6 +88,7 @@ data ACEConfig = ACEConfig { technology        :: T.Text
                            } deriving (Show, Generic)
 
 instance FromJSON ACEIncludes
+instance FromJSON ACECorners
 instance FromJSON ACEParameters
 instance FromJSON ACEConstraints
 instance FromJSON ACEInstance
@@ -147,6 +157,26 @@ genDCopJson cfg = T.init . T.concat
     where dco     = dcop cfg
           opID    = aceID cfg
           devInst = deviceInstance cfg
+
+genCornerJson' :: T.Text -> Float -> T.Text
+genCornerJson' corn temp = foldl T.append ""
+        [ "\n    \"" , corn, "_", temp' , "\" :{\n"
+        , "      \"netlist\":\"" , corn, "_", temp', ".scs\",\n"
+        , "      \"temperature (K)\":" , tk , ",\n"
+        , "      \"temperature (C)\":" , tc , ",\n"
+        , "      \"corner\":\"" , corn , "\",\n"
+        , "      \"comment\": \"result of dcmatch invalid\"\n"
+        , "    }," ]
+    where temp'' = round temp :: Int
+          temp' = T.pack . show $ temp''
+          tk = T.pack . show $ temp
+          tc = T.pack . show $ (temp - 273)
+
+genCornerJson :: ACECorners -> T.Text
+genCornerJson corn = T.init . T.concat
+                   $ [ genCornerJson' c t
+                     | c <- ["ff", "fs", "mcg", "sf", "ss"]
+                     , t <- temperatures corn ]
 
 genSizingJson' :: T.Text -> Float -> ACEConstraints -> T.Text
 genSizingJson' p v c = foldl T.append ""
@@ -242,27 +272,21 @@ aceParameterMap ap = M.fromList $ zip k v
           k = ["cl", "rl", "i0", "vs", "vsup"]
 
 fillPropertiesTemplate :: ACEConfig -> T.Text -> T.Text
-fillPropertiesTemplate cfg = T.replace p pj 
+fillPropertiesTemplate cfg = T.replace c cj
+                           . T.replace p pj 
                            . T.replace s sj
                            . T.replace o oj
                            . T.replace m mj
-    where p = "%PARAMETERS%"
-          s = "%SIZING%"
-          o = "%DCOP%"
-          m = "%DCMATCH%"
+    where c  = "%CORNERS%"
+          p  = "%PARAMETERS%"
+          s  = "%SIZING%"
+          o  = "%DCOP%"
+          m  = "%DCMATCH%"
+          cj = genCornerJson (corners cfg)
           pj = genParamJson cfg
           sj = genSizingJson cfg
           oj = genDCopJson cfg
           mj = genDCmatchJson cfg
-
-genIncludes' :: ACEIncludes -> T.Text
-genIncludes' ci = T.concat ["include \"", includeFile ci, "\"",  section , "\n"]
-    where section = if T.null $ includeSection ci 
-                       then ""
-                       else T.append " section=" (includeSection ci)
-
-genIncludes :: ACEConfig -> T.Text
-genIncludes cfg = T.concat $ map genIncludes' (includes cfg)
 
 genParameters' :: T.Text -> Float -> T.Text
 genParameters' p v = T.concat [ p, "=", T.pack $ show v, " " ]
@@ -307,21 +331,18 @@ genScale :: ACEConfig -> T.Text
 genScale cfg = T.concat ["scale=", T.pack $ show (scale cfg)]
 
 fillTestbenchTemplate :: ACEConfig -> T.Text -> T.Text -> T.Text
-fillTestbenchTemplate cfg dut = T.replace i i'
-                              . T.replace p p'
+fillTestbenchTemplate cfg dut = T.replace p p'
                               . T.replace s s'
                               . T.replace d d'
                               . T.replace a a'
                               . T.replace h h'
                               . T.replace c c'
-    where i = "%INCLUDES%"
-          p = "%PARAMETERS%"
+    where p = "%PARAMETERS%"
           s = "%SIZING%"
           d = "%DUT%"
           a = "%SAVES%"
           h = "%HEADER%"
           c = "%SCALE%"
-          i' = genIncludes cfg
           p' = genParameters cfg
           s' = genSizing cfg
           d' = fillDutTemplate (deviceInstance cfg) dut
@@ -354,3 +375,46 @@ fillDutTemplate inst = fillDerviedStatements inst
           p' = pmosInstance inst
           r' = resInstance inst
           c' = capInstance inst
+
+genIncludes :: ACEIncludes -> T.Text
+genIncludes ci = T.concat ["include \"", includeFile ci, "\"",  section , "\n"]
+    where section = if T.null $ includeSection ci 
+                       then ""
+                       else T.append " section=" (includeSection ci)
+
+genTemperature :: Float -> T.Text
+genTemperature tmp = T.concat [ "tempOptions options temp=", temp
+                              , " tnom=", temp, "\n" ]
+    where temp = T.pack . show . round $ (tmp - 273)
+
+genBase :: ACEConfig -> T.Text 
+genBase cfg = T.concat [ "include \"", op , ".scs\"" ]
+    where op = aceID cfg
+
+fillCornerTemplate :: ACEConfig -> [ACEIncludes] -> Float -> T.Text -> T.Text
+fillCornerTemplate cfg is ts = T.replace h h'
+                             . T.replace i i'
+                             . T.replace t t'
+                             . T.replace b b'
+    where h = "%HEADER%"
+          i = "%INCLUDES%"
+          t = "%TEMP%"
+          b = "%BASE%"
+          h' = genHeader cfg
+          i' = T.concat $ map genIncludes is
+          t' = genTemperature ts
+          b' = genBase cfg
+
+genCornerFileName :: T.Text -> Float -> String
+genCornerFileName c t = T.unpack . T.concat $ [c, "_", t', ".scs"]
+    where t' = T.pack . show . round $ t
+
+mapCornerTemplates :: ACEConfig -> T.Text -> [(String, T.Text)]
+mapCornerTemplates cfg templ = [ ( genCornerFileName c t 
+                                 , fillCornerTemplate cfg i t templ)
+                               | (c,i) <- zip corn' incs
+                               , t <- temperatures corn ]
+    where corn  = corners cfg
+          corn' = ["ff", "fs", "mcg", "sf", "ss"]
+          incs  = map ($ corn) [ff, fs, mc, sf, ss]
+          temps = temperatures corn

@@ -1,5 +1,12 @@
 {
   "environment":"SingleEndedOpampEnvironment",
+
+  "corners":
+  {
+
+%CORNERS% 
+
+  },
   "parameters":
   {
 

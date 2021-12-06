@@ -7,6 +7,7 @@ import Paths_tacer
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
+import qualified Data.Map as M
 import Data.Functor
 import System.Environment
 import System.Exit
@@ -22,25 +23,28 @@ main = do
 
     propTemplate <- getDataFileName propTemp >>= TIO.readFile
     testTemplate <- getDataFileName testTemp >>= TIO.readFile
-    dutTempalte  <- getDataFileName (T.unpack dutTemp) >>= TIO.readFile
+    cornTemplate <- getDataFileName cornTemp >>= TIO.readFile
+    dutTemplate  <- getDataFileName (T.unpack dutTemp) >>= TIO.readFile
 
-    let prop = fillPropertiesTemplate cfg propTemplate
-        tb   = fillTestbenchTemplate cfg dutTempalte testTemplate
+    let prop  = fillPropertiesTemplate cfg propTemplate
+        tb    = fillTestbenchTemplate cfg dutTemplate testTemplate
+        corns = mapCornerTemplates cfg cornTemplate
 
     let dir            = "./" ++ T.unpack opID
         propertiesFile = dir ++ "/properties.json"
-        inputFile      = dir ++ "/input.scs"
+        testFile       = dir ++ "/" ++ T.unpack opID ++ ".scs"
         gitignoreFile  = dir ++ "/.gitignore"
     
     createDirectory dir
 
-    let foo = flip copyFile gitignoreFile
-
     getDataFileName gitTemp >>= (`copyFile` gitignoreFile)
 
     TIO.writeFile propertiesFile prop
-    TIO.writeFile inputFile tb
+    TIO.writeFile testFile tb
+
+    mapM_ (\(f,c) -> TIO.writeFile (dir ++ "/" ++ f) c) corns
 
   where propTemp = "resource/prop-template.json"
         testTemp = "resource/tb-template.scs"
+        cornTemp = "resource/corner-template.scs"
         gitTemp  = "resource/ignore-template.git"
