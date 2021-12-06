@@ -1,9 +1,29 @@
 technology: "sky130-1V8"
 aceID:      "op1"
 scale:      1e-6
-includes:
+corners:
+  ff: 
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "ff"
+  fs: 
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "fs"
+  mc: 
   - includeFile: "./models/sky130.scs" 
     includeSection: "tt"
+  sf: 
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "sf"
+  ss: 
+  - includeFile: "./models/sky130.scs" 
+    includeSection: "ss"
+  temperatures:
+    - 233
+    - 273
+    - 300
+    - 323
+    - 373
+    - 423
 parameters:
   cl:   5e-12
   rl:   100e6
