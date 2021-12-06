@@ -43,10 +43,43 @@ These commands will create folders `op#` in the current working directory like
 so:
 
 ```
-$ tree ./op1
-op1
-├── input.scs
-└── properties.json
+$ tree ./op2
+op2
+├── ff_233.scs
+├── ff_273.scs
+├── ff_300.raw
+├── ff_300.scs
+├── ff_323.scs
+├── ff_373.scs
+├── ff_423.scs
+├── fs_233.scs
+├── fs_273.scs
+├── fs_300.scs
+├── fs_323.scs
+├── fs_373.scs
+├── fs_423.scs
+├── mcg_233.scs
+├── mcg_273.scs
+├── mcg_300.scs
+├── mcg_323.scs
+├── mcg_373.scs
+├── mcg_423.scs
+├── op2.scs
+├── properties.json
+├── sf_233.scs
+├── sf_273.scs
+├── sf_300.scs
+├── sf_323.scs
+├── sf_373.scs
+├── sf_423.scs
+├── ss_233.scs
+├── ss_273.scs
+├── ss_300.scs
+├── ss_323.scs
+├── ss_373.scs
+└── ss_423.scs
 
-0 directories, 2 files
+0 directories, 33 files
 ```
+
+**NOTE:** You need the right PDK to simulate these netlists with spectre.
