@@ -19,6 +19,20 @@
   {
       "dcop":
       {
+        "idd":{
+          "unit":"A",
+          "reference":"DUT:VDD",
+          "comment" : "positive supply current"
+        },
+        "iss":{
+          "unit":"A",
+          "reference":"DUT:VSS",
+          "comment" : "negative supply current"
+        },
+        "A":{
+          "unit":"um²",
+          "comment" : "estimated area"
+        },
 
 %DCOP%
 
